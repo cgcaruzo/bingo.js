@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-image: url('./wavy-lines.svg');
+  background-size: cover;
+  user-select: none;
+}
+
+.container {
+  display: grid;
+  min-height: 100vh;
+  min-width: 100vw;
+  grid-template-areas:
+  "header header aside"
+  "main main aside"
+  "main main aside"
+  "footer footer aside";
+  gap: 0.5em;
+  padding: 1em;
+}
+
+.container * {
+  border-radius: 6px;
+  background: goldenrod;
+}
+
+
+.container header {
+  grid-area: header;
+  background: red;
+}
+
+.container main {
+
+  grid-area: main;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-columns: auto;
+  padding: 1em;
+  gap:0px;
+}
+
+.container aside {
+  grid-area: aside;
+}
+
+.container footer {
+  grid-area: footer;
+}
+
+main .number {
+  box-shadow: inset 0 0 0 3px white,
+              inset 0 0 0 5px red,
+              0 0 10px 0.1px yellow;
+  background: white;
+  border-radius: 50%;
+  text-align: center;
+  align-content: center;
+  color: red;
+  font-size: 1.2em;
+  font-weight: bold;
+  width: 2em;
+&.disabled {
+    background: red;
+    color:white;
+  }
+}
