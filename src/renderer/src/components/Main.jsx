@@ -11,12 +11,13 @@ function Main() {
     const randomIndex = Math.floor(Math.random() * newNumbers.length)
     newNumbers[randomIndex].disabled = true
     setNumbers(newNumbers)
+    console.log("NUMBERS", numbers.filter(n => n.disabled))
   }
 /*
-      <button onClick={handleClick }>PRUEBA</button>
       */  
   return (
     <>
+      <button onClick={handleClick }>PRUEBA</button>
 
       <main>
         {
@@ -29,6 +30,13 @@ function Main() {
           })
         }
       </main>
+      <ul>
+        {
+          numbers.filter(n => n.disabled).map((number, index) => {
+            return ` (${number.text}) `
+          })
+        }
+      </ul>
     </>
   )
 }
