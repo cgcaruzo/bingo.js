@@ -1,9 +1,9 @@
 function Number({disabled, text}) {
 
   if (disabled) {
-    return <div className="number disabled">{text}</div>
+    return <div className="main-cell"><div className="number disabled">{text}</div></div>
   } else { 
-    return <div className="number">{text}</div>
+    return <div className="main-cell"><div className="number">{text}</div></div>
   }
   
 }

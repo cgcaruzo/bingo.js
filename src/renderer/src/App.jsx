@@ -14,7 +14,6 @@ function App() {
           <Header></Header>
           <Aside></Aside>
           <Main></Main>
-          <Footer></Footer>
         </div>
       </DataProvider>
     </>

@@ -1,8 +1,9 @@
+import arrozPedroniLogo from '../assets/arrozPedroni.jpg'
 function Header() {
 
   return (
     <>
-      <header>header</header>
+      <header><img src={arrozPedroniLogo}></img></header>
     </>
   )
 }

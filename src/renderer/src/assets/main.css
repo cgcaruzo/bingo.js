@@ -17,10 +17,9 @@ body {
   min-height: 100vh;
   min-width: 100vw;
   grid-template-areas:
-  "header header aside"
-  "main main aside"
-  "main main aside"
-  "footer footer aside";
+  "header aside"
+  "main aside"
+  "main aside";
   gap: 0.5em;
   padding: 1em;
 }
@@ -37,13 +36,13 @@ body {
 }
 
 .container main {
-
+  width: auto;
   grid-area: main;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  grid-auto-columns: auto;
+  grid-template-rows: repeat(9, 1fr);
   padding: 1em;
-  gap:0px;
+  gap:0.2vw;
 }
 
 .container aside {
@@ -53,7 +52,7 @@ body {
 .container footer {
   grid-area: footer;
 }
-
+/*
 main .number {
   box-shadow: inset 0 0 0 3px white,
               inset 0 0 0 5px red,
@@ -66,7 +65,31 @@ main .number {
   font-size: 1.2em;
   font-weight: bold;
   width: 2em;
-&.disabled {
+
+}
+*/
+.main-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para la bolilla */
+.number {
+    width: 4.6vw;  /* Tamaño relativo al ancho de la pantalla */
+    height: 4.6vw; /* Mantiene la proporción circular */
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 3px white,
+                inset 0 0 0 5px red,
+                0 0 10px 0.1px yellow;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 2.3vw; /* Tamaño de la fuente relativo al ancho de la pantalla */
+    font-weight: bold;
+  &.disabled {
     background: red;
     color:white;
   }

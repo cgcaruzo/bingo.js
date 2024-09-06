@@ -3,7 +3,7 @@ import { DataContext } from '../context/DataContext'
 import Number from './Number'
 
 function Main() {
-  const { numbers, setNumbers } = useContext(DataContext)
+  const { numbers, setNumbers } = useContext(DataContext) 
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -13,11 +13,10 @@ function Main() {
     setNumbers(newNumbers)
   }
 /*
-      <button onClick={handleClick }>PRUEBA</button>
+    <button onClick={handleClick }>PRUEBA</button>
       */  
   return (
     <>
-
       <main>
         {
           numbers.map((number, index) => {
