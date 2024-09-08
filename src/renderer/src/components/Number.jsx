@@ -1,11 +1,9 @@
-function Number({disabled, text}) {
+export const Number = ({disabled, text}) => {
 
   if (disabled) {
-    return <div className="main-cell"><div className="number disabled">{text}</div></div>
+    return <div className="number disabled">{text}</div>
   } else { 
-    return <div className="main-cell"><div className="number">{text}</div></div>
+    return <div className="number">{text}</div>
   }
   
 }
-
-export default Number

@@ -2,13 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'UnifrakturCook'; /* Nombre personalizado de la fuente */
+    src: url('./fonts/UnifrakturCook-Bold.ttf') format('truetype'); /* Ruta y formato de la fuente */
+    font-weight: normal; /* Puedes especificar peso si la fuente tiene varios */
+    font-style: normal;  /* También puedes especificar el estilo */
+}
+
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-image: url('./wavy-lines.svg');
-  background-size: cover;
+    background-image: url('wood01.webp');
+    background-repeat: repeat;
+  /*
+  background-color: #e5e5f7;
+  background-image:  linear-gradient(135deg, #a9876a 25%, transparent 25%), linear-gradient(225deg, #a9876a 25%, transparent 25%), linear-gradient(45deg, #a9876a 25%, transparent 25%), linear-gradient(315deg, #a9876a 25%, #e5e5f7 25%);
+  background-position:  37px 0, 37px 0, 0 0, 0 0;
+  background-size: 37px 37px;
+  background-repeat: repeat;
+  */
   user-select: none;
 }
 
@@ -16,23 +30,78 @@ body {
   display: grid;
   min-height: 100vh;
   min-width: 100vw;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas de 100px */
+  grid-template-rows: repeat(3, 1fr);    /* Tres filas de 100px */
   grid-template-areas:
-  "header aside"
-  "main aside"
-  "main aside";
+  "main main header-left"
+  "main main header-right"
+  "main main header-right";
+  /*
+  grid-template-areas:
+  "header-left header-right header-right"
+  "main main main"
+  "main main main"
+  "main main main"
+  "main main main";
+  */
   gap: 0.5em;
   padding: 1em;
+  box-shadow: 0 0 10px 0.1px black;
 }
 
-.container * {
+.container .header-left, .header-right, main {
   border-radius: 6px;
-  background: goldenrod;
+  background: rgba(250, 239, 219, 0.8);
+  box-shadow: 0 0 5px 0.1px black;
+
 }
 
 
-.container header {
-  grid-area: header;
-  background: red;
+.container .header-left {
+  grid-area: header-left;
+  font-family: "UnifrakturCook", cursive;
+  font-weight: 700;
+  font-style: normal;
+  align-content: center;
+}
+
+.container .header-right {
+  position: relative;
+  grid-area: header-right;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+ul.buttons {
+  position: absolute;
+  top: 80%;
+}
+
+ul.buttons li {
+  display: inline-block;
+  font-size: 4vw;
+}
+
+ul.last-drawns li {
+  display: inline-block;
+  margin-inline: 0.3vw;
+}
+
+ul.last-drawns {
+  align-self: flex-start;
+  margin-inline: auto;
+  position: absolute;
+  top: 60%;
+  left: 5%;
+  border-radius: 6px;
+  margin-inline: auto;
+  width: 28vw;
+  height: 7vw;
+  align-content: center;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .container main {
@@ -72,25 +141,175 @@ main .number {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(0, 0, 0, 0);
 }
 
 /* Estilo para la bolilla */
 .number {
-    width: 4.6vw;  /* Tamaño relativo al ancho de la pantalla */
-    height: 4.6vw; /* Mantiene la proporción circular */
+    width: 4.2vw;  /* Tamaño relativo al ancho de la pantalla */
+    height: 4.2vw; /* Mantiene la proporción circular */
     border-radius: 50%;
-    box-shadow: inset 0 0 0 3px white,
-                inset 0 0 0 5px red,
-                0 0 10px 0.1px yellow;
+    box-shadow: inset 0 0 0 3px white, 
+    inset 0 0 0 5px red, 
+    2px 2px 5px 1px black;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     color: red;
-    font-size: 2.3vw; /* Tamaño de la fuente relativo al ancho de la pantalla */
+    font-size: 2.2vw; /* Tamaño de la fuente relativo al ancho de la pantalla */
     font-weight: bold;
   &.disabled {
     background: red;
     color:white;
+    animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+  }
+}
+
+.big-number {
+  position: absolute;
+  top: 10%;
+}
+
+.big-number .number {
+    width: 16vw;  /* Tamaño relativo al ancho de la pantalla */
+    height: 16vw; /* Mantiene la proporción circular */
+    font-size: 8vw; /* Tamaño de la fuente relativo al ancho de la pantalla */
+    font-weight: bold;
+    animation: scale-up-center 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.last-drawns .number {
+  width: 5vw;  /* Tamaño relativo al ancho de la pantalla */
+  height: 5vw; /* Mantiene la proporción circular */
+  font-size: 2.5vw; /* Tamaño de la fuente relativo al ancho de la pantalla */
+  font-weight: bold;
+  
+}
+
+.last-drawns li:nth-child(1) .number {
+  animation: roll-in-left 0.6s ease-out both;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  position: absolute;
+  top: 26%;
+  width: 28px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #E3AAD6;
+  transform-origin: top;
+  display: none;
+  animation: l3-0 1s infinite linear;
+}
+.loader::before,
+.loader::after {
+  content: "";
+  grid-area: 1/1;
+  background:#F4DD51;
+  border-radius: 50%;
+  transform-origin: top;
+  animation: inherit;
+  animation-name: l3-1;
+}
+.loader::after {
+  background: #F10C49;
+  --s:180deg;
+}
+@keyframes l3-0 {
+  0%,20% {transform: rotate(0)}
+  100%   {transform: rotate(360deg)}
+}
+@keyframes l3-1 {
+  50% {transform: rotate(var(--s,90deg))}
+  100% {transform: rotate(0)}
+}
+
+
+.header-left .title {
+  font-size: 3vw;
+  text-align: center;
+  color: white;
+  -webkit-text-stroke: 2px black; 
+}
+
+.header-left .big-title {
+  
+  font-size: 10vw;
+  text-align: center;
+  color: yellow;
+  -webkit-text-stroke: 6px black; 
+  /*
+  --shadow-size: 3px;
+  text-shadow: var(--shadow-size) var(--shadow-size) 0 black, 
+     calc(var(--shadow-size) * -1) calc(var(--shadow-size) * -1) 0 black, 
+      var(--shadow-size) calc(var(--shadow-size) * -1) 0 black, 
+     calc(var(--shadow-size) * -1) var(--shadow-size) 0 black;
+     */
+}
+
+@keyframes scale-up-center {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate-center {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-scale-down {
+  0% {
+    transform: scale(1) rotateZ(0);
+  }
+  50% {
+    transform: scale(0.5) rotateZ(180deg);
+  }
+  100% {
+    transform: scale(1) rotateZ(360deg);
+  }
+}
+
+@keyframes roll-in-left {
+  0% {
+    transform: translateX(-4vw) rotate(-360deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes shake-horizontal {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    transform: translateX(10px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  90% {
+    transform: translateX(-8px);
   }
 }

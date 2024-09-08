@@ -1,5 +1,5 @@
-import Header from './components/Header'
-import Aside from './components/Aside'
+import HeaderLeft from './components/HeaderLeft'
+import HeaderRight from './components/HeaderRight'
 import Main from './components/Main'
 import Footer from './components/Footer'
 import { DataProvider } from './context/DataContext'
@@ -11,8 +11,8 @@ function App() {
     <>
       <DataProvider>
         <div className="container">
-          <Header></Header>
-          <Aside></Aside>
+          <HeaderLeft></HeaderLeft>
+          <HeaderRight></HeaderRight>
           <Main></Main>
         </div>
       </DataProvider>
