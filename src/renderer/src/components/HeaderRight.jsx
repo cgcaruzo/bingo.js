@@ -62,10 +62,12 @@ function HeaderRight() {
 
     if (isPlaying) {
       document.getElementById("btn-play").innerHTML =  "⏸"
-      const id = setInterval(myFunction, 5000)
+      document.getElementById("big-title").classList.add('animate-playing')
+      const id = setInterval(myFunction, 10000)
       setIntervalId(id) 
     } else {
       document.getElementById("btn-play").innerHTML = "▶"
+      document.getElementById("big-title").classList.remove('animate-playing')
       clearInterval(intervalId)
       setIntervalId(null)
     }

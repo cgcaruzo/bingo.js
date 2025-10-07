@@ -44,7 +44,7 @@ body {
   "main main main"
   "main main main";
   */
-  gap: 0.5em;
+  gap: 1em;
   padding: 1em;
   box-shadow: 0 0 10px 0.1px black;
 }
@@ -239,7 +239,7 @@ main .number {
   font-size: 10vw;
   text-align: center;
   color: yellow;
-  -webkit-text-stroke: 6px black; 
+  -webkit-text-stroke: 4px black; 
   /*
   --shadow-size: 3px;
   text-shadow: var(--shadow-size) var(--shadow-size) 0 black, 
@@ -247,6 +247,10 @@ main .number {
       var(--shadow-size) calc(var(--shadow-size) * -1) 0 black, 
      calc(var(--shadow-size) * -1) var(--shadow-size) 0 black;
      */
+}
+
+.animate-playing {
+  animation: rotate-scale-down 10s ease-out infinite both;
 }
 
 @keyframes scale-up-center {

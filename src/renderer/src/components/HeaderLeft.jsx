@@ -16,7 +16,7 @@ function HeaderLeft() {
     <>
       <header className="header-left">
         
-        <h1 className="big-title">Bingo</h1>
+        <h1 id="big-title" className="big-title">Bingo</h1>
       </header>
     </>
   )
