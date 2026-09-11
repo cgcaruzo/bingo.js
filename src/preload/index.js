@@ -1,12 +1,14 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-// Custom APIs for renderer
-const api = {}
+const api = {
+  showConfirmDialog: (title, message) =>
+    ipcRenderer.invoke('show-confirm-dialog', { title, message }),
+  saveGameState: (gameState) => ipcRenderer.invoke('save-game-state', gameState),
+  loadGameState: () => ipcRenderer.invoke('load-game-state'),
+  deleteGameState: () => ipcRenderer.invoke('delete-game-state')
+}
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)

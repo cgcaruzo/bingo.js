@@ -1,22 +1,15 @@
-import arrozPedroniLogo from '../assets/arrozPedroni.jpg'
-import { useContext, useEffect } from 'react'
-import { DataContext } from '../context/DataContext'
-import { drawNumbers } from '../helpers/drawNumbers'
+import { eventConfig } from '../config/eventConfig'
 
 function HeaderLeft() {
-  const { numbers, setNumbers } = useContext(DataContext) 
-
-  const handleClick = (e) => {
-    e.preventDefault()
-    const newNumbers = drawNumbers(numbers)
-    setNumbers(newNumbers)
-  }
-/*<h1 className="title">El Arroz del Pedroni</h1>*/
   return (
     <>
       <header className="header-left">
-        
-        <h1 id="big-title" className="big-title">Bingo</h1>
+        <div className="title-container">
+          <h1 id="big-title" className="big-title">
+            {eventConfig.eventName}
+          </h1>
+          {eventConfig.subtitle && <p className="subtitle">{eventConfig.subtitle}</p>}
+        </div>
       </header>
     </>
   )

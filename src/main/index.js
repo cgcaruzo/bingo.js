@@ -1,15 +1,19 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs'
 
 function createWindow() {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1400,
+    height: 900,
+    minWidth: 800,
+    minHeight: 600,
     show: false,
     autoHideMenuBar: true,
+    resizable: true,
+    fullscreenable: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -49,8 +53,65 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.handle('show-confirm-dialog', async (_event, { title, message }) => {
+    try {
+      const result = await dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Cancelar', 'Aceptar'],
+        defaultId: 1,
+        cancelId: 0,
+        title: title || 'Confirmar',
+        message: message || '¿Está seguro?'
+      })
+      return result.response === 1
+    } catch (error) {
+      console.error('Error en show-confirm-dialog:', error)
+      return false
+    }
+  })
+
+  const getGameStatePath = () => join(app.getPath('userData'), 'current-game.json')
+
+  ipcMain.handle('save-game-state', async (_event, gameState) => {
+    try {
+      const filePath = getGameStatePath()
+      writeFileSync(filePath, JSON.stringify(gameState), 'utf-8')
+      return { success: true }
+    } catch (error) {
+      console.error('Error al guardar estado:', error)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('load-game-state', async () => {
+    try {
+      const filePath = getGameStatePath()
+      if (!existsSync(filePath)) {
+        return { success: false, exists: false }
+      }
+      const data = readFileSync(filePath, 'utf-8')
+      const gameState = JSON.parse(data)
+      return { success: true, exists: true, gameState }
+    } catch (error) {
+      console.error('Error al cargar estado:', error)
+      return { success: false, exists: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('delete-game-state', async () => {
+    try {
+      const filePath = getGameStatePath()
+      if (existsSync(filePath)) {
+        unlinkSync(filePath)
+      }
+      return { success: true }
+    } catch (error) {
+      console.error('Error al eliminar estado:', error)
+      return { success: false, error: error.message }
+    }
+  })
 
   createWindow()
 

@@ -1,39 +1,32 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { DataContext } from '../context/DataContext'
-import { drawNumbers } from '../helpers/drawNumbers'
 import { Number } from './Number'
 
 function Main() {
-  const { numbers, setNumbers } = useContext(DataContext) 
+  const { numbers } = useContext(DataContext)
 
-
-
-
-/*
-      */  
   return (
     <>
-      
-
       <main>
-        {
-          numbers.map((number, index) => {
-            return (
-            <div className="main-cell"
-              key={index}>
-              <Number 
-                
-                disabled={number.disabled}
-                text={number.text}>
-              </Number>
+        {numbers.map((number) => {
+          return (
+            <div className="main-cell" key={number.text}>
+              <div
+                className="number-wrapper"
+                title={
+                  number.disabled
+                    ? `Sacado en posición #${number.pickOrder}`
+                    : `Número ${number.text}`
+                }
+              >
+                <Number disabled={number.disabled} text={number.text} />
+              </div>
             </div>
-            )
-          })
-        }
+          )
+        })}
       </main>
-
     </>
   )
 }
 
-export default Main 
+export default Main
