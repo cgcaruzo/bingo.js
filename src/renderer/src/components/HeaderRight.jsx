@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState, useRef, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import { DataContext } from '../context/DataContext'
 import { drawNumbers } from '../helpers/drawNumbers'
 import { Number } from './Number'
 
-function HeaderRight() {
+function HeaderRight({ onOpenSettings }) {
   const { numbers, setNumbers, restartNumbers } = useContext(DataContext)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMixing, setIsMixing] = useState(false)
@@ -266,6 +267,11 @@ function HeaderRight() {
           <li>
             <button onClick={handleRestart}>🔁</button>
           </li>
+          <li>
+            <button onClick={onOpenSettings} className="btn-settings">
+              ⚙
+            </button>
+          </li>
         </ul>
       </header>
 
@@ -312,6 +318,10 @@ function HeaderRight() {
       )}
     </>
   )
+}
+
+HeaderRight.propTypes = {
+  onOpenSettings: PropTypes.func.isRequired
 }
 
 export default HeaderRight
