@@ -1,8 +1,16 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs'
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  unlinkSync,
+  mkdirSync,
+  copyFileSync,
+  readdirSync
+} from 'fs'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -43,6 +51,14 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const imagesDir = join(app.getPath('userData'), 'images')
+
+  protocol.registerFileProtocol('bingo-images', (request, callback) => {
+    const url = request.url.replace('bingo-images://', '')
+    const filePath = join(imagesDir, decodeURIComponent(url))
+    callback({ path: filePath })
+  })
+
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
@@ -111,6 +127,86 @@ app.whenReady().then(() => {
       console.error('Error al eliminar estado:', error)
       return { success: false, error: error.message }
     }
+  })
+
+  const getConfigPath = () => join(app.getPath('userData'), 'app-config.json')
+  const getImagesDir = () => join(app.getPath('userData'), 'images')
+
+  ipcMain.handle('load-config', async () => {
+    try {
+      const filePath = getConfigPath()
+      if (!existsSync(filePath)) {
+        return { success: false, exists: false }
+      }
+      const data = readFileSync(filePath, 'utf-8')
+      const config = JSON.parse(data)
+      return { success: true, exists: true, config }
+    } catch (error) {
+      console.error('Error al cargar configuración:', error)
+      return { success: false, exists: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('save-config', async (_event, config) => {
+    try {
+      const filePath = getConfigPath()
+      writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf-8')
+      return { success: true }
+    } catch (error) {
+      console.error('Error al guardar configuración:', error)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('select-image', async () => {
+    try {
+      const result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp'] }]
+      })
+      if (result.canceled || result.filePaths.length === 0) {
+        return { success: false, canceled: true }
+      }
+      return { success: true, filePath: result.filePaths[0] }
+    } catch (error) {
+      console.error('Error al seleccionar imagen:', error)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('copy-image', async (_event, { sourcePath, type }) => {
+    try {
+      const imagesDir = getImagesDir()
+      if (!existsSync(imagesDir)) {
+        mkdirSync(imagesDir, { recursive: true })
+      }
+      const ext = sourcePath.split('.').pop()
+      const destPath = join(imagesDir, `${type}.${ext}`)
+      copyFileSync(sourcePath, destPath)
+      return { success: true, destPath }
+    } catch (error) {
+      console.error('Error al copiar imagen:', error)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('delete-image', async (_event, type) => {
+    try {
+      const imagesDir = getImagesDir()
+      const files = existsSync(imagesDir) ? readdirSync(imagesDir) : []
+      const fileToDelete = files.find((f) => f.startsWith(`${type}.`))
+      if (fileToDelete) {
+        unlinkSync(join(imagesDir, fileToDelete))
+      }
+      return { success: true }
+    } catch (error) {
+      console.error('Error al eliminar imagen:', error)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('get-images-path', async () => {
+    return getImagesDir()
   })
 
   createWindow()

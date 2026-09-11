@@ -1,14 +1,17 @@
-import { eventConfig } from '../config/eventConfig'
+import { useContext } from 'react'
+import { ConfigContext } from '../context/ConfigContext'
 
 function HeaderLeft() {
+  const { config } = useContext(ConfigContext)
+
   return (
     <>
       <header className="header-left">
         <div className="title-container">
           <h1 id="big-title" className="big-title">
-            {eventConfig.eventName}
+            {config.eventName}
           </h1>
-          {eventConfig.subtitle && <p className="subtitle">{eventConfig.subtitle}</p>}
+          {config.subtitle && <p className="subtitle">{config.subtitle}</p>}
         </div>
       </header>
     </>

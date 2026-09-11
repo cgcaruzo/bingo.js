@@ -1,21 +1,54 @@
+import { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { ConfigContext } from '../context/ConfigContext'
+import { getDecadeColor } from '../config/defaultConfig'
 
 export const Number = ({ disabled, text, isMixing }) => {
-  const getDecadeClass = () => {
-    if (text <= 9) return 'decade-1'
-    if (text <= 19) return 'decade-2'
-    if (text <= 29) return 'decade-3'
-    if (text <= 39) return 'decade-4'
-    if (text <= 49) return 'decade-5'
-    if (text <= 59) return 'decade-6'
-    if (text <= 69) return 'decade-7'
-    if (text <= 79) return 'decade-8'
-    return 'decade-9'
+  const { config } = useContext(ConfigContext)
+  const decadeColor = getDecadeColor(config, text)
+
+  const baseStyle = {
+    width: undefined,
+    height: undefined,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
   }
 
-  const className = `number ${disabled ? 'disabled' : ''} ${getDecadeClass()} ${isMixing ? 'mixing' : ''}`
+  if (disabled) {
+    return (
+      <div
+        className={`number disabled ${isMixing ? 'mixing' : ''}`}
+        style={{
+          ...baseStyle,
+          background: decadeColor,
+          color: 'white',
+          border: 'none',
+          boxShadow: `inset 0 0 0 3px rgba(255,255,255,0.3), 0 4px 12px ${decadeColor}66`
+        }}
+      >
+        {text}
+      </div>
+    )
+  }
 
-  return <div className={className}>{text}</div>
+  return (
+    <div
+      className={`number ${isMixing ? 'mixing' : ''}`}
+      style={{
+        ...baseStyle,
+        background: 'white',
+        color: decadeColor,
+        border: `3px solid ${decadeColor}`,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.1)'
+      }}
+    >
+      {text}
+    </div>
+  )
 }
 
 Number.propTypes = {

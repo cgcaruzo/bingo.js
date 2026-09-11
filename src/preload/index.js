@@ -6,7 +6,13 @@ const api = {
     ipcRenderer.invoke('show-confirm-dialog', { title, message }),
   saveGameState: (gameState) => ipcRenderer.invoke('save-game-state', gameState),
   loadGameState: () => ipcRenderer.invoke('load-game-state'),
-  deleteGameState: () => ipcRenderer.invoke('delete-game-state')
+  deleteGameState: () => ipcRenderer.invoke('delete-game-state'),
+  loadConfig: () => ipcRenderer.invoke('load-config'),
+  saveConfig: (config) => ipcRenderer.invoke('save-config', config),
+  selectImage: () => ipcRenderer.invoke('select-image'),
+  copyImage: (sourcePath, type) => ipcRenderer.invoke('copy-image', { sourcePath, type }),
+  deleteImage: (type) => ipcRenderer.invoke('delete-image', type),
+  getImagesPath: () => ipcRenderer.invoke('get-images-path')
 }
 
 if (process.contextIsolated) {

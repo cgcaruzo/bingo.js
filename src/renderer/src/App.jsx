@@ -1,8 +1,10 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import HeaderLeft from './components/HeaderLeft'
 import HeaderRight from './components/HeaderRight'
 import Main from './components/Main'
+import SettingsPanel from './components/SettingsPanel'
 import { DataProvider, DataContext } from './context/DataContext'
+import { ConfigProvider } from './context/ConfigContext'
 
 function ResumeGameModal() {
   const { resumeGame, startNewGame } = useContext(DataContext)
@@ -55,24 +57,28 @@ function ResumeGameModal() {
 
 function AppContent() {
   const { showResumeDialog } = useContext(DataContext)
+  const [showSettings, setShowSettings] = useState(false)
 
   return (
     <>
       <div className="container">
         <HeaderLeft />
-        <HeaderRight />
+        <HeaderRight onOpenSettings={() => setShowSettings(true)} />
         <Main />
       </div>
       {showResumeDialog && <ResumeGameModal />}
+      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
     </>
   )
 }
 
 function App() {
   return (
-    <DataProvider>
-      <AppContent />
-    </DataProvider>
+    <ConfigProvider>
+      <DataProvider>
+        <AppContent />
+      </DataProvider>
+    </ConfigProvider>
   )
 }
 
